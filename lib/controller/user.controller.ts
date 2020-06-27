@@ -50,6 +50,7 @@ const getEncryptedPassword = async (password: string): Promise<string> => {
   return encryptedPassword;
 };
 
+// TODO
 const deleteUser: RequestHandler = async (req, res) => {
 
 }

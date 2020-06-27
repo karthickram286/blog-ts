@@ -5,6 +5,7 @@ import cors from 'cors';
 
 import connectDB from './lib/connection/DBConnection';
 import UserRouter from './lib/routes/users.routes';
+import AuthRouter from './lib/routes/auth.routes';
 
 const app: any = express();
 const PORT: any = process.env.PORT || 5000;
@@ -31,6 +32,7 @@ connectDB();
  * Routers registration
  */
 app.use('/v1/users', UserRouter);
+app.use('/v1/auth', AuthRouter);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
