@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash';
 import bcrypt from 'bcrypt';
 
@@ -11,20 +11,21 @@ import User from '../models/user.model';
 
 /**
  * Adds a new User to the DB
+ * 
  * @param req 
  * @param res 
  */
 const createUser: RequestHandler = async (req, res) => {
   
   let { username, password } = req.body;
-  let id: string = uuid.v4();
+  let id: string = uuidv4();
 
   
-  if (_.isEmpty(getUser(username))) {
+  if (_.isEmpty(await getUser(username))) {
     const user = new User({
       id: id,
       username: username,
-      password: getEncryptedPassword(password)
+      password: await getEncryptedPassword(password)
     });
 
     await addUser(user);
@@ -43,8 +44,8 @@ const createUser: RequestHandler = async (req, res) => {
  */
 const getEncryptedPassword = async (password: string): Promise<string> => {
 
-  let salt = await bcrypt.genSalt(6);
-  let encryptedPassword = await bcrypt.hash(password, salt);
+  let salt: string = await bcrypt.genSalt(6);
+  let encryptedPassword: string = await bcrypt.hash(password, salt);
 
   return encryptedPassword;
 };

@@ -9,7 +9,7 @@ if (_.isEmpty(user) || _.isEmpty(password)) {
   process.exit(1);
 }
 
-const mongodbURI: string = `mongodb+srv://${user}:${password}@cluster0-owebi.mongodb.net/<dbname>?retryWrites=true&w=majority`;
+const mongodbURI: string = `mongodb+srv://${user}:${password}@cluster0-owebi.mongodb.net/prod?retryWrites=true&w=majority`;
 
 const connectDB = async () => {
   try {
