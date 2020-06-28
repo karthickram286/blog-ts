@@ -1,16 +1,19 @@
 import { Sequelize, DataTypes } from 'sequelize';
 
-const sequelize = new Sequelize('postgres::memory:');
+const sequelize = new Sequelize('postgres:blog_app_db');
 
 const User = sequelize.define('User', {
 
   id: {
     type: DataTypes.UUID,
+    unique: true,
+    primaryKey: true,
     allowNull: false
   },
 
   username: {
     type: DataTypes.STRING,
+    unique: true,
     allowNull: false
   },
 

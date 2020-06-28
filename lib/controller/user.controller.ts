@@ -22,7 +22,7 @@ const createUser: RequestHandler = async (req, res) => {
 
   
   if (_.isEmpty(await getUser(username))) {
-    const user = new User({
+    const user = await User.create({
       id: id,
       username: username,
       password: await getEncryptedPassword(password)

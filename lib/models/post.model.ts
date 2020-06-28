@@ -1,5 +1,5 @@
 import { Sequelize, DataTypes } from 'sequelize';
-import { min } from 'lodash';
+import User from './user.model';
 
 const sequelize = new Sequelize('postgres::memory:');
 
@@ -8,6 +8,7 @@ const Post = sequelize.define('Post', {
   id: {
     type: DataTypes.UUID,
     allowNull: false,
+    unique: true,
     primaryKey: true
   },
 
@@ -25,7 +26,7 @@ const Post = sequelize.define('Post', {
     type: DataTypes.UUID,
     allowNull: false,
     references: {
-      model: 'User',
+      model: User,
       key: 'id'
     }
   },
