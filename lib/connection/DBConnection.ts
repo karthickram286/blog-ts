@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
 import _ from 'lodash';
+import { Sequelize } from 'sequelize';
 
 const user: string = process.env.DB_USER || '';
 const password: string = process.env.DB_PASSWORD || '';
@@ -9,21 +9,25 @@ if (_.isEmpty(user) || _.isEmpty(password)) {
   process.exit(1);
 }
 
-const mongodbURI: string = `mongodb+srv://${user}:${password}@cluster0-owebi.mongodb.net/prod?retryWrites=true&w=majority`;
+const sequelize = new Sequelize('blog_app_db', 'ecom-karthick.ra', '', {
+  host: 'localhost',
+  dialect: 'postgres'
+});
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(mongodbURI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-      useFindAndModify: false
-    });
-    console.log(`Connected to Mongo DB...`);
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
   } catch (error) {
-    console.log(`Can't conncet to Mongo DB ${error}... Exiting application`);
-    process.exit(1);
+    console.error('Unable to connect to the database:', error);
   }
-}
+};
 
-export default connectDB;
+const closeDBConnection = async () => {
+  sequelize.close();
+};
+
+export {
+  connectDB,
+  closeDBConnection
+}

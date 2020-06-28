@@ -12,6 +12,7 @@ import {
  * Returns a JSON web token to the user
  * @param req 
  * @param res 
+ * @returns authtoken
  */
 const login: RequestHandler = async (req, res) => {
 
@@ -38,6 +39,7 @@ const login: RequestHandler = async (req, res) => {
 /**
  * Returns the JWT for given user id
  * @param id 
+ * @returns jwt
  */
 const getJWT = (id: any) => {
   return jwt.sign({

@@ -3,7 +3,7 @@ import path from 'path';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
 
-import connectDB from './lib/connection/DBConnection';
+import { connectDB, closeDBConnection } from './lib/connection/DBConnection';
 import UserRouter from './lib/routes/users.routes';
 import AuthRouter from './lib/routes/auth.routes';
 
@@ -46,4 +46,9 @@ if (process.env.NODE_ENV === 'production') {
  */
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
+});
+
+process.on('SIGINT', () => {
+  console.log("Terminating the application gracefully");
+  closeDBConnection();
 });
