@@ -1,21 +1,61 @@
 import jwt from 'jsonwebtoken';
-import { RequestHandler } from 'express';
+import _ from 'lodash';
+import { Request } from 'express';
 
-const authorize: RequestHandler = (req, res, next) => {
+/**
+ * Returns the JWT for given user id
+ * @param id 
+ * @returns jwt
+ */
+const getJWT = (id: any) => {
+  return jwt.sign({
+    id: id
+  }, 'jwtPrivateKey');
+};
+
+/**
+ * Authorizes the incoming request
+ * @param req 
+ * @param author_id 
+ */
+const authorize = (req: Request, author_id: string) => {
 
   const token = req.header('x-auth-token');
   
   // If token is not provided
   if (!token) {
-    return res.status(403).json('Auth token not provided');
+    return {
+      status: 403,
+      message: 'Auth token not provided'
+    }
   }
 
   try {
-    const payload = jwt.verify(token, 'jwtPrivateKey');
-    next();
+    const decoded = jwt.verify(token, 'jwtPrivateKey');
+
+    let decodedId = _.get(decoded, 'id');
+
+    // If token didn't match with the passed author id
+    if (!_.isEqual(decodedId, author_id)) {
+      return {
+        status: 401,
+        message: `Invalid token`
+      }
+    }
+
+    return {
+      status: 200,
+      message: 'Authorized'
+    }
   } catch (error) {
-    return res.status(401).json(`Invalid token`);
+    return {
+      status: 401,
+      message: `Invalid token`
+    }
   }
 }
 
-export default authorize;
+export {
+  getJWT,
+  authorize
+};

@@ -34,7 +34,7 @@ connectDB();
  */
 app.use('/v1/users', UserRouter);
 app.use('/v1/auth', AuthRouter);
-app.use('/v1/post', PostRouter);
+app.use('/v1/posts', PostRouter);
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));

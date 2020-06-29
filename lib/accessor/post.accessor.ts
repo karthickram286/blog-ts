@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import Post from '../models/post.model';
 
 const createPost = async (post: any) => {
@@ -8,6 +10,29 @@ const createPost = async (post: any) => {
   }
 };
 
+const getPostById = async (post_id: string) => {
+  let post = await Post.findOne({
+    where: {
+      id: post_id
+    }
+  });
+
+  return post;
+};
+
+const getAllPostsByLimit = async (limit: number) => {
+  let posts = await Post.findAll({
+    order: [
+      ['updatedAt', 'DESC']
+    ],
+    limit: limit
+  });
+
+  return posts;
+}
+
 export {
-  createPost
+  createPost,
+  getPostById,
+  getAllPostsByLimit
 };

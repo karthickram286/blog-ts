@@ -2,7 +2,7 @@ import { RequestHandler } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import { getJWT } from '../middleware/authorize.middleware';
 
 import {
   getUser
@@ -35,18 +35,6 @@ const login: RequestHandler = async (req, res) => {
   const token = getJWT(_.get(user, 'id'));
   return res.send({ authToken: token });
 };
-
-/**
- * Returns the JWT for given user id
- * @param id 
- * @returns jwt
- */
-const getJWT = (id: any) => {
-  return jwt.sign({
-    id: id
-  }, 'jwtPrivateKey');
-};
-
 
 export {
   login
