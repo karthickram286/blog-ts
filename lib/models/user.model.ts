@@ -1,6 +1,6 @@
 import { Sequelize, DataTypes } from 'sequelize';
 
-const sequelize = new Sequelize('postgres:blog_app_db');
+import { sequelize } from '../connection/DBConnection';
 
 const User = sequelize.define('User', {
 
@@ -22,7 +22,7 @@ const User = sequelize.define('User', {
     allowNull: false
   }
 }, {
-  tableName: 'users',
+  tableName: 'Users',
 });
 
 export default User;

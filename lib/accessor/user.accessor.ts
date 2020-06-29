@@ -9,7 +9,7 @@ const addUser = async (user: any) => {
 };
 
 const getUser = async (username: string) => {
-  let user = await User.findAll({
+  let user = await User.findOne({
     where: {
       username: username
     }

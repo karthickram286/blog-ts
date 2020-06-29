@@ -1,7 +1,6 @@
 import { Sequelize, DataTypes } from 'sequelize';
-import User from './user.model';
 
-const sequelize = new Sequelize('postgres::memory:');
+import { sequelize } from '../connection/DBConnection';
 
 const Post = sequelize.define('Post', {
 
@@ -24,19 +23,10 @@ const Post = sequelize.define('Post', {
 
   author_id: {
     type: DataTypes.UUID,
-    allowNull: false,
-    references: {
-      model: User,
-      key: 'id'
-    }
-  },
-
-  created_at: {
-    type: DataTypes.DATE,
     allowNull: false
   }
 }, {
-  tableName: 'posts',
+  tableName: 'Posts',
 });
 
 export default Post;

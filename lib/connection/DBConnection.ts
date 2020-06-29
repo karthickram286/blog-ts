@@ -9,7 +9,7 @@ if (_.isEmpty(user) || _.isEmpty(password)) {
   process.exit(1);
 }
 
-const sequelize = new Sequelize('blog_app_db', 'ecom-karthick.ra', '', {
+const sequelize = new Sequelize('blog_app_db', 'postgres', '', {
   host: 'localhost',
   dialect: 'postgres'
 });
@@ -28,6 +28,7 @@ const closeDBConnection = async () => {
 };
 
 export {
+  sequelize,
   connectDB,
   closeDBConnection
 }

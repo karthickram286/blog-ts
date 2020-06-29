@@ -53,4 +53,5 @@ app.listen(PORT, () => {
 process.on('SIGINT', () => {
   console.log("Terminating the application gracefully");
   closeDBConnection();
+  process.exit(1);
 });

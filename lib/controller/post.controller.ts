@@ -17,12 +17,11 @@ const addPost: RequestHandler = async (req, res) => {
   let { title, body, author_id } = req.body;
   let id: string = uuidv4();
 
-  const post = Post.create({
+  const post = await Post.create({
     id: id,
     title: title,
     body: body,
-    author_id: author_id,
-    created_at: Date.now()
+    author_id: author_id
   });
 
   await createPost(post);
