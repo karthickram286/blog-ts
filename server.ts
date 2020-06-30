@@ -46,7 +46,7 @@ if (process.env.NODE_ENV === 'production') {
 /**
  * Starting server
  */
-app.listen(PORT, () => {
+let server = app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
 });
 
@@ -55,3 +55,7 @@ process.on('SIGINT', () => {
   closeDBConnection();
   process.exit(1);
 });
+
+export {
+  server
+};
