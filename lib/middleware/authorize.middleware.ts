@@ -2,6 +2,9 @@ import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 import { Request } from 'express';
 
+const jwtPrivateKey: any = process.env.JWT_PRIVATE_KEY;
+
+
 /**
  * Returns the JWT for given user id
  * @param id 
@@ -10,7 +13,9 @@ import { Request } from 'express';
 const getJWT = (id: any) => {
   return jwt.sign({
     id: id
-  }, 'jwtPrivateKey');
+  }, jwtPrivateKey, {
+    expiresIn: '12h'    // JWT will expire in 12 hours
+  });
 };
 
 /**
@@ -31,8 +36,7 @@ const authorize = (req: Request, author_id: string) => {
   }
 
   try {
-    const decoded = jwt.verify(token, 'jwtPrivateKey');
-
+    const decoded = jwt.verify(token, jwtPrivateKey);
     let decodedId = _.get(decoded, 'id');
 
     // If token didn't match with the passed author id

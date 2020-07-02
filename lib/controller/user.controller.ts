@@ -5,9 +5,13 @@ import bcrypt from 'bcrypt';
 
 import {
   addUser,
-  getUser
+  getUser,
+  getUserById,
+  deleteUserById
 } from '../accessor/user.accessor';
+import { schemaValidate } from '../util/util';
 import User from '../models/user.model';
+import UserSchema from '../schema/user.schema';
 
 /**
  * Adds a new User to the DB
@@ -16,24 +20,34 @@ import User from '../models/user.model';
  * @param res 
  */
 const createUser: RequestHandler = async (req, res) => {
-  
+
   let { username, password } = req.body;
   let id: string = uuidv4();
 
-  
+
   if (_.isEmpty(await getUser(username))) {
-    const user = await User.create({
+    
+    let userObj = {
       id: id,
       username: username,
-      password: await getEncryptedPassword(password)
-    });
+      password: password
+    };
 
-    await addUser(user);
+    let isValid = await schemaValidate(UserSchema, userObj);
+    
+    if (isValid) {
+      userObj.password = await getEncryptedPassword(password);
+      const user = await User.create(userObj);
+      await addUser(user);
+    } else {
+      return res.status(422)
+        .json(`Invalid User object`);
+    }
 
-    res.status(200)
-      .json(user);
+    return res.status(200)
+      .json(userObj);
   } else {
-    res.status(409)
+    return res.status(409)
       .json(`Username already exists`);
   }
 }
@@ -53,6 +67,17 @@ const getEncryptedPassword = async (password: string): Promise<string> => {
 // TODO
 const deleteUser: RequestHandler = async (req, res) => {
 
+  let userId = req.params.id;
+
+  const user = await getUserById(userId);
+
+  if (!_.isEmpty(user)) {
+    await deleteUserById(userId);
+    return res.status(200)
+      .json('User deleted successfully');
+  }
+  return res.status(404)
+    .json(`UserId doesn't exists`);
 }
 
 export {

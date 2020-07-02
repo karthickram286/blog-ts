@@ -15,7 +15,7 @@ import { authorize } from '../middleware/authorize.middleware';
  * @param req 
  * @param res 
  */
-const addPost: RequestHandler = async (req, res) => { 
+const addPost: RequestHandler = async (req, res) => {
 
   let { title, body, author_id } = req.body;
 
@@ -37,7 +37,7 @@ const addPost: RequestHandler = async (req, res) => {
   await createPost(post);
 
   return res.status(200)
-              .json(post);
+    .json(post);
 };
 
 /**
@@ -53,27 +53,27 @@ const getPost: RequestHandler = async (req, res) => {
 
   if (!_.isEmpty(post)) {
     return res.status(200)
-                .json(post);
+      .json(post);
   } else {
     return res.status(404)
-                .json({
-                  error: `Post not found for id: ${post_id}`
-                });
+      .json({
+        error: `Post not found for id: ${post_id}`
+      });
   }
 };
 
 const getAllPosts: RequestHandler = async (req, res) => {
-  
+
   let posts = await getAllPostsByLimit(10);
 
   if (!_.isEmpty(posts)) {
     return res.status(200)
-                .json(posts);
+      .json(posts);
   } else {
     return res.status(404)
-                .json({
-                  error: `No posts found`
-                });
+      .json({
+        error: `No posts found`
+      });
   }
 };
 

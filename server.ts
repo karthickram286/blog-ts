@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import path from 'path';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
+import _ from 'lodash';
 
 import { connectDB, closeDBConnection } from './lib/connection/DBConnection';
 import UserRouter from './lib/routes/users.routes';
@@ -23,6 +24,12 @@ const rateLimiter = rateLimit({
 app.use(cors());
 app.use(rateLimiter);
 app.use(express.json());
+
+let jwtPrivateKey = process.env.JWT_PRIVATE_KEY;
+if (_.isEmpty(jwtPrivateKey)) {
+  console.log(`JWT private key is not configured... Exiting application`);
+  process.exit(1);
+}
 
 /**
  * MongoDB connection
