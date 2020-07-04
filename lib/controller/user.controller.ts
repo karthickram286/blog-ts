@@ -34,7 +34,7 @@ const createUser: RequestHandler = async (req, res) => {
     };
 
     let isValid = await schemaValidate(UserSchema, userObj);
-    
+
     if (isValid) {
       userObj.password = await getEncryptedPassword(password);
       const user = await User.create(userObj);
@@ -64,7 +64,11 @@ const getEncryptedPassword = async (password: string): Promise<string> => {
   return encryptedPassword;
 };
 
-// TODO
+/**
+ * Deletes an user by id
+ * @param req 
+ * @param res 
+ */
 const deleteUser: RequestHandler = async (req, res) => {
 
   let userId = req.params.id;

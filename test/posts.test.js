@@ -12,7 +12,7 @@ describe('Auth Routes API tests', () => {
     app = require('../build/server');
   });
 
-  describe('Post APIs', async () => {
+  describe('POST', async () => {
 
     before(async () => {
       // creating a user

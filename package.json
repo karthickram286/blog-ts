@@ -7,7 +7,9 @@
     "start": "nodemon build/server.js",
     "build": "npx tsc",
     "server": "npm run build && NODE_ENV=development npm start",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "client": "npm start --prefix client",
+    "prod": "npm run build && NODE_ENV=production npm start",
+    "dev": "concurrently \"npm run prod\" \"npm run client\"",
     "integ-test": "NODE_ENV=test mocha --exit",
     "heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
   },
