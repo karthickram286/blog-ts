@@ -1,12 +1,11 @@
 import React from 'react';
 import axios from 'axios';
+import { Button, Badge, FormGroup, FormControl, FormLabel, ListGroup } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
-import { Button, Badge, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
-
 
 import './styles/blog.styles.css';
 
-class Login extends React.Component {
+class Register extends React.Component {
 
   constructor() {
     super();
@@ -14,6 +13,7 @@ class Login extends React.Component {
     this.state = {
       username: "",
       password: "",
+      confirmpassword: "",
       status: ""
     };
   }
@@ -35,44 +35,53 @@ class Login extends React.Component {
   handleSubmit = async (event) => {
     event.preventDefault();
 
-    let user = {
+    const user = {
       username: this.state.username,
       password: this.state.password
     }
-    
+
     try {
-      let response = await axios.post('/v1/auth/login', user);
+      await axios.post('/v1/users/create', user);
       this.setState({
-        status: 'Successfully logged in'
+        status: 'Registered successfully'
       });
-      this.setCookie(response.data.authToken);
-      localStorage.setItem('userId', response.data.user_id);
     } catch (error) {
       this.setState({
-        status: `Login failed: ${error.response.data}`
+        status: `Registration failed: ${error.response.data}`
       });
     }
-  }
-
-  setCookie(authToken) {
-    let date = new Date();
-    date.setTime(date.getTime() + (60 * 60 * 1000)); // 1 hr
-    let expiresIn = "expires="+ date.toUTCString();
-    document.cookie = "authToken=" + authToken + ";" + expiresIn + ";path=/";
+      
   }
 
   validateForm() {
     return (this.state.username.length > 3)
-      && (this.state.password.length > 5);
+      && (this.state.password.length > 5)
+      && (this.state.confirmpassword.length > 5)
+      && (this.state.password === this.state.confirmpassword);
   }
 
   render() {
     return (
       <div>
-        <div className="login">
+        <div className="register">
+
           <h2>
-            Login
+            User Registeration
           </h2> <br />
+
+          <div className="registeralert">
+            <ListGroup as="ul">
+              <ListGroup.Item as="li" disabled>
+                Username should be atleast 4 characters
+              </ListGroup.Item>
+              <ListGroup.Item as="li" disabled>
+                Password should be atleast 6 characters
+              </ListGroup.Item>
+              <ListGroup.Item as="li" disabled>
+                Password and Confirm password should match
+              </ListGroup.Item>
+            </ListGroup>
+          </div> <br />
 
           <form onSubmit={this.handleSubmit}>
 
@@ -96,6 +105,16 @@ class Login extends React.Component {
               />
             </FormGroup> <br />
 
+            <FormGroup controlId="confirmpassword">
+              <FormLabel color="blue">Confirm Password</FormLabel>
+              <FormControl
+                autoFocus
+                type="password"
+                value={this.state.confirmpassword}
+                onChange={this.handleChange}
+              />
+            </FormGroup> <br />
+
             <FormGroup>
               <center><Badge variant="info">{this.state.status}</Badge></center>
             </FormGroup>
@@ -108,10 +127,11 @@ class Login extends React.Component {
               Register
             </Button>
           </form>
+
         </div>
       </div>
     );
   }
 }
 
-export default withRouter(Login);
+export default withRouter(Register);

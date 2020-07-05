@@ -6,16 +6,17 @@ import { Button, Badge, FormGroup, FormControl, FormLabel } from 'react-bootstra
 
 import './styles/blog.styles.css';
 
-class Login extends React.Component {
+class CreatePost extends React.Component {
 
   constructor() {
     super();
 
     this.state = {
-      username: "",
-      password: "",
+      title: "",
+      body: "",
+      author_id: localStorage.getItem('userId'),
       status: ""
-    };
+    }
   }
 
   handleChange = event => {
@@ -34,64 +35,41 @@ class Login extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
-
-    let user = {
-      username: this.state.username,
-      password: this.state.password
-    }
-    
-    try {
-      let response = await axios.post('/v1/auth/login', user);
-      this.setState({
-        status: 'Successfully logged in'
-      });
-      this.setCookie(response.data.authToken);
-      localStorage.setItem('userId', response.data.user_id);
-    } catch (error) {
-      this.setState({
-        status: `Login failed: ${error.response.data}`
-      });
-    }
-  }
-
-  setCookie(authToken) {
-    let date = new Date();
-    date.setTime(date.getTime() + (60 * 60 * 1000)); // 1 hr
-    let expiresIn = "expires="+ date.toUTCString();
-    document.cookie = "authToken=" + authToken + ";" + expiresIn + ";path=/";
-  }
+  };
 
   validateForm() {
-    return (this.state.username.length > 3)
-      && (this.state.password.length > 5);
+    return (this.state.title.length > 2)
+      && (this.state.body.length > 4);
   }
 
   render() {
     return (
       <div>
-        <div className="login">
+        <div className="create-post">
           <h2>
-            Login
+            Add Post
           </h2> <br />
 
           <form onSubmit={this.handleSubmit}>
 
             <FormGroup controlId="username">
-              <FormLabel color="blue">Username</FormLabel>
+              <FormLabel color="blue">Title</FormLabel>
               <FormControl
                 autoFocus
                 type="text"
-                value={this.state.username}
+                value={this.state.title}
                 onChange={this.handleChange}
               />
             </FormGroup> <br />
 
-            <FormGroup controlId="password">
-              <FormLabel color="blue">Password</FormLabel>
+            <FormGroup controlId="body">
+              <FormLabel color="blue">Body</FormLabel>
               <FormControl
+                as="textarea"
+                rows="5"
                 autoFocus
-                type="password"
-                value={this.state.password}
+                type="text"
+                value={this.state.body}
                 onChange={this.handleChange}
               />
             </FormGroup> <br />
@@ -105,13 +83,15 @@ class Login extends React.Component {
               disabled={!this.validateForm()}
               type="submit"
             >
-              Register
+              Add Post
             </Button>
+
           </form>
+
         </div>
       </div>
-    );
-  }
+    )
+  };
 }
 
-export default withRouter(Login);
+export default withRouter(CreatePost);

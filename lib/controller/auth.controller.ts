@@ -18,12 +18,12 @@ const login: RequestHandler = async (req, res) => {
 
   let { username, password } = req.body;
 
-  let user = await getUser(username);
+  let user: any = await getUser(username);
 
   // If username is not present
   if (_.isEmpty(user)) {
     return res.status(404)
-            .json(`Username doesn't exists`);
+            .json(`Invalid email or password`);
   }
 
   const validPassword = await bcrypt.compare(password, _.get(user, 'password'));
@@ -33,7 +33,10 @@ const login: RequestHandler = async (req, res) => {
   }
 
   const token = getJWT(_.get(user, 'id'));
-  return res.send({ authToken: token });
+  return res.send({ 
+    authToken: token,
+    user_id: user.id
+  });
 };
 
 export {
