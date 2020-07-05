@@ -10,7 +10,7 @@ describe('User Routes API tests', () => {
     app = require('../build/server');
   });
 
-  describe('POST', async () => {
+  describe ('POST', async () => {
 
     it('should create a user and return it', async () => {
       let response = await axios.post('http://localhost:5000/v1/users/create', {
@@ -25,7 +25,20 @@ describe('User Routes API tests', () => {
     });
   });
 
-  describe('DELETE', async () => {
+  describe ('GET', async () => {
+
+    it ('should return the user object', async () => {
+      let response = await axios.get(`http://localhost:5000/v1/users/get/${userId}`);
+
+      userId = response.data.id;
+
+      assert.equal(response.status, 200);
+      assert.equal(response.statusText, 'OK');
+      assert.equal(response.data.username, 'testuser');
+    });
+  });
+
+  describe ('DELETE', async () => {
 
     it('should delete a user', async () => {
       let response = await axios.delete(`http://localhost:5000/v1/users/delete/${userId}`);

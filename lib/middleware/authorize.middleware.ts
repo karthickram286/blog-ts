@@ -24,7 +24,6 @@ const getJWT = (id: any) => {
  * @param author_id 
  */
 const authorize = (req: Request, author_id: string) => {
-
   const token = req.header('x-auth-token');
   
   // If token is not provided

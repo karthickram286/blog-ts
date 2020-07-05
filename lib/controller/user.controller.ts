@@ -53,6 +53,25 @@ const createUser: RequestHandler = async (req, res) => {
 }
 
 /**
+ * Retuns an user for given id
+ * @param req 
+ * @param res 
+ */
+const getByUserId: RequestHandler = async (req, res) => {
+  
+  let userId = req.params.id;
+
+  const user = await getUserById(userId);
+
+  if (!_.isEmpty(user)) {
+    return res.status(200)
+      .json(user);
+  }
+  return res.status(404)
+    .json(`UserId doesn't exists`);
+};
+
+/**
  * Returns encrypted password
  * @param password 
  */
@@ -86,5 +105,6 @@ const deleteUser: RequestHandler = async (req, res) => {
 
 export {
   createUser,
+  getByUserId,
   deleteUser
 };

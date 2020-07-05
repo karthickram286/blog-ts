@@ -7,8 +7,10 @@ import {
   getPostById,
   getAllPostsByLimit
 } from '../accessor/post.accessor';
+import { getUserById } from '../accessor/user.accessor';
 import Post from '../models/post.model';
 import { authorize } from '../middleware/authorize.middleware';
+import { getByUserId } from './user.controller';
 
 /**
  * Adds a new Post 
@@ -62,13 +64,44 @@ const getPost: RequestHandler = async (req, res) => {
   }
 };
 
+interface PostResponse {
+  id: string,
+  title: string,
+  body: string,
+  author: string,
+  createdAt: string,
+  updatedAt: string
+}
+
+const createPostResponse = async (post: any) => {
+  let user = await getUserById(post.author_id);
+
+  let postResponse: PostResponse = { 
+    id: post.id,
+    title: post.title,
+    body: post.body,
+    author:  _.get(user, 'username'),
+    createdAt: post.createdAt,
+    updatedAt: post.updatedAt
+  };
+
+  return postResponse;
+};
+
 const getAllPosts: RequestHandler = async (req, res) => {
 
   let posts = await getAllPostsByLimit(10);
 
   if (!_.isEmpty(posts)) {
+    let postsResp: any = [];
+
+    for (const post of posts) {
+      const postResp = await createPostResponse(post);
+      postsResp.push(postResp);
+    }
+    
     return res.status(200)
-      .json(posts);
+      .json(postsResp);
   } else {
     return res.status(404)
       .json({

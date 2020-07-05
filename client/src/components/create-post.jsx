@@ -1,8 +1,8 @@
 import React from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import { withRouter } from 'react-router-dom';
 import { Button, Badge, FormGroup, FormControl, FormLabel } from 'react-bootstrap';
-
 
 import './styles/blog.styles.css';
 
@@ -14,7 +14,6 @@ class CreatePost extends React.Component {
     this.state = {
       title: "",
       body: "",
-      author_id: localStorage.getItem('userId'),
       status: ""
     }
   }
@@ -35,6 +34,28 @@ class CreatePost extends React.Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
+
+    let post = {
+      title: this.state.title,
+      body: this.state.body,
+      author_id: localStorage.getItem('userId')
+    }
+
+    try {
+      await axios.post('/v1/posts/create', post, {
+        headers: {
+          "x-auth-token": Cookies.get('authToken')
+        }
+      });
+      this.setState({
+        status: `Post added successfully`
+      });
+    } catch (error) {
+      this.setState({
+        status: `Post can't be created: ${error.response.data}`
+      });
+    }
+    
   };
 
   validateForm() {
@@ -52,7 +73,7 @@ class CreatePost extends React.Component {
 
           <form onSubmit={this.handleSubmit}>
 
-            <FormGroup controlId="username">
+            <FormGroup controlId="title">
               <FormLabel color="blue">Title</FormLabel>
               <FormControl
                 autoFocus

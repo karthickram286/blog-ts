@@ -5,7 +5,7 @@
 CREATE TABLE "public"."Posts" (
     "id" varchar(255),
     "title" varchar(255),
-    "body" varchar(255),
+    "body" varchar(8000),
     "author_id" varchar(255),
     "createdAt" timestamptz NOT NULL,
     "updatedAt" timestamptz NOT NULL
@@ -20,3 +20,6 @@ CREATE TABLE "public"."Users" (
     "updatedAt" timestamptz NOT NULL
 );
 
+GRANT ALL PRIVILEGES ON TABLE "Posts" to postgres;
+
+GRANT ALL PRIVILEGES ON TABLE "Users" to postgres;

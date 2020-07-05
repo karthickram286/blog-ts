@@ -47,6 +47,11 @@ class Login extends React.Component {
       });
       this.setCookie(response.data.authToken);
       localStorage.setItem('userId', response.data.user_id);
+
+      // Refresh page after 3 seconds
+      setTimeout(() => { 
+        window.location.reload(); 
+      }, 3000);
     } catch (error) {
       this.setState({
         status: `Login failed: ${error.response.data}`
