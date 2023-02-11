@@ -34,7 +34,7 @@
     "@types/node": "^14.0.14",
     "@types/uuid": "^8.0.0",
     "concurrently": "^5.2.0",
-    "nodemon": "^2.0.4",
+    "nodemon": "^2.0.20",
     "sequelize-cli": "^6.1.0",
     "typescript": "^3.9.5"
   },
